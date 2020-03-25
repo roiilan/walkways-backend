@@ -29,7 +29,7 @@ async function query(filterBy = {}) {
 
         // console.log('criteria', criteria);
 
-        console.log('BACKED PROJSERVICE', projs);
+        // console.log('BACKED PROJSERVICE', projs);
 
         return projs
     } catch (err) {
@@ -81,7 +81,7 @@ async function update(proj) {
     proj._id = ObjectId(proj._id);
     try {
         await collection.replaceOne({ "_id": proj._id }, { $set: proj })
-        console.log('backend proj', proj);
+        // console.log('backend proj', proj);
 
         return proj
     } catch (err) {
