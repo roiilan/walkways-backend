@@ -19,7 +19,7 @@ async function login(username, password) {
     return user;
 }
 
-async function signup(username, password, fullName, imgUrl, isAdmin) {
+async function signup({ username, password, fullName, imgUrl, isAdmin }) {
     console.log('signupPPPPPPPP', username, password, fullName, imgUrl, isAdmin)
         // logger.debug(`auth.service - signup with username: ${username}, username: ${username}`)
     if (!fullName || !password || !username) return Promise.reject('fullName, username and password are required!')
