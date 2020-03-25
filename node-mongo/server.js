@@ -1,4 +1,3 @@
-console.log('Hello Node, Hi Mongo');
 const MongoClient = require('mongodb').MongoClient;
 
 const customerService = require('./services/customer.service');

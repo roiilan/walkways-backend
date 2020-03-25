@@ -8,7 +8,7 @@ function connectSockets(io) {
             io.to(socket.myTopic).emit('chat addMsg', msg)
         })
         socket.on('chat topic', topic => {
-            console.log(topic);
+            // console.log(topic);
 
             if (socket.myTopic) {
                 socket.leave(socket.myTopic)
@@ -17,7 +17,6 @@ function connectSockets(io) {
             socket.myTopic = topic;
         })
         socket.on('writingUser', ({ from, topic }) => {
-            console.log('avivush');
             socket.broadcast.emit('typing', { from, topic })
         })
     })
