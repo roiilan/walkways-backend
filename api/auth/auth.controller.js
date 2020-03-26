@@ -2,7 +2,6 @@ const authService = require('./auth.service')
 const logger = require('../../services/logger.service')
 
 async function login(req, res) {
-    console.log('controllerrrrrrrrrrrrrRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR')
     const { username, password } = req.body
     try {
         const user = await authService.login(username, password)
@@ -14,11 +13,12 @@ async function login(req, res) {
 }
 
 async function signup(req, res) {
-    console.log('controllerRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR')
     try {
-        const { username, password, fullName,imgUrl,isAdmin } = req.body
-        logger.debug(username + ", " + password + ', ' + fullName + ', ' + imgUrl + ', ' + isAdmin)
-        const account = await authService.signup(username, password, fullName,imgUrl,isAdmin)
+        console.log('req.body in auth.controller: ', req.body);
+        
+        const { username, password, fullName,imgUrl,isAdmin, joinAt, karma, position } = req.body
+        logger.debug(username + ", " + password + ', ' + fullName + ', ' + imgUrl + ', ' + isAdmin+ ', ' + joinAt+ ', ' + karma+ ', ' + position)
+        const account = await authService.signup(username, password, fullName,imgUrl,isAdmin, joinAt, karma, position)
         logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
         const user = await authService.login(username, password)
         req.session.user = user

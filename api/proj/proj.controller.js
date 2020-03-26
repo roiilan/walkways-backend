@@ -7,7 +7,6 @@ async function getPoj(req, res) {
 
 async function getPojs(req, res) {
     const projs = await projService.query(req.query)
-    console.log('controller', projs)
     res.send(projs)
 }
 
@@ -18,10 +17,7 @@ async function deletePoj(req, res) {
 
 async function updatePoj(req, res) {
     const proj = req.body;
-
     await projService.update(proj)
-    console.log('controller ', proj);
-
     res.send(proj)
 }
 

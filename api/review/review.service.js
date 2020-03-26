@@ -3,47 +3,52 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy = {}) {
-    // const criteria = _buildCriteria(filterBy)
+    console.log('filterBy in review service:', filterBy);
+    
+    const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
-        // const reviews = await collection.find(criteria).toArray();
-        var reviews = await collection.aggregate([
-            {
-                $match: filterBy
-            },
-            {
-                $lookup:
-                {
-                    from: 'user',
-                    localField: 'byUserId',
-                    foreignField: '_id',
-                    as: 'byUser'
-                }
-            }, 
-            {
-                $unwind: '$byUser'
-            },
-            {
-                $lookup:
-                {
-                    from: 'user',
-                    localField: 'aboutUserId',
-                    foreignField: '_id',
-                    as: 'aboutUser'
-                }
-            }, 
-            {
-                $unwind: '$aboutUser'
-            }
-        ]).toArray()
+        // const reviews = await collection.find().toArray();
+        const reviews = await collection.find(criteria).toArray();
+        // var reviews = await collection.aggregate([
+        //     {
+        //         $match: filterBy
+        //     },
+        //     {
+        //         $lookup:
+        //         {
+        //             from: 'user',
+        //             localField: 'byId',
+        //             foreignField: '_id',
+        //             as: 'by'
+        //         }
+        //     }, 
+        //     {
+        //         $unwind: '$by'
+        //     },
+        //     {
+        //         $lookup:
+        //         {
+        //             from: 'user',
+        //             localField: 'aboutId',
+        //             foreignField: '_id',
+        //             as: 'about'
+        //         }
+        //     }, 
+        //     {
+        //         $unwind: '$about'
+        //     }
+        // ]).toArray()
 
-        reviews = reviews.map(review => {
-            review.byUser = {_id: review.byUser._id, username: review.byUser.username}
-            review.aboutUser = {_id: review.aboutUser._id, username: review.aboutUser.username}
-            delete review.byUserId;
-            delete review.aboutUserId;
-            return review;
-        })
+        // reviews = reviews.map(review => {
+        //     console.log('review in review service: ', review);
+            
+        //     review.by = {_id: review.by._id, username: review.by.username}
+        //     review.about = {_id: review.about._id, username: review.about.username}
+        //     delete review.byId;
+        //     delete review.aboutId;
+        //     return review;
+        // })
 
         return reviews
     } catch (err) {
@@ -64,8 +69,8 @@ async function remove(reviewId) {
 
 
 async function add(review) {
-    review.byUserId = ObjectId(review.byUserId);
-    review.aboutUserId = ObjectId(review.aboutUserId);
+    review.by._id = ObjectId(review.by._id);
+    review.about._id = ObjectId(review.about._id);
 
     const collection = await dbService.getCollection('review')
     try {
@@ -77,15 +82,30 @@ async function add(review) {
     }
 }
 
+async function update(review){
+    const collection = await dbService.getCollection('review')
+    review._id = ObjectId(review._id);
+    try {
+        await collection.replaceOne({ "_id": review._id }, { $set: review })
+        // console.log('backend review', review);
+
+        return review
+    } catch (err) {
+        console.log(`ERROR: cannot update review ${review._id}`)
+        throw err;
+    }
+}
+
 function _buildCriteria(filterBy) {
-    const criteria = {};
+    const criteria = {'about._id':ObjectId(filterBy.id)};
     return criteria;
 }
 
 module.exports = {
     query,
     remove,
-    add
+    add,
+    update
 }
 
 

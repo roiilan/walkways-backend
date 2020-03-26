@@ -34,13 +34,14 @@ async function getById(userId) {
         const user = await collection.findOne({"_id":ObjectId(userId)})
         delete user.password
 
-        user.givenReviews = await reviewService.query({byUserId: ObjectId(user._id) })
-        user.givenReviews = user.givenReviews.map(review => {
-            delete review.byUser
-            return review
-        })
+        // user.givenReviews = await reviewService.query({id: ObjectId(user._id) })
+        // user.givenReviews = user.givenReviews.map(review => {
+        //     delete review.byUser
+        //     return review
+        // })
 
-
+        // console.log('user:', user);
+        
         return user
     } catch (err) {
         console.log(`ERROR: while finding user ${userId}`)
@@ -61,7 +62,8 @@ async function getByUsername(username) {
 
 async function remove(userId) {
     const collection = await dbService.getCollection('users')
-
+    console.log('userId in userService of backend', userId);
+    
     try {
         await collection.deleteOne({"_id":ObjectId(userId)})
     } catch (err) {
