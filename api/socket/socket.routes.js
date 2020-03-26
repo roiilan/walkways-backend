@@ -8,7 +8,6 @@ function connectSockets(io) {
             io.to(socket.myTopic).emit('chat addMsg', msg)
         })
         socket.on('chat topic', topic => {
-            // console.log(topic);
 
             if (socket.myTopic) {
                 socket.leave(socket.myTopic)

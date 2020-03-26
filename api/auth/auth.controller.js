@@ -15,10 +15,10 @@ async function login(req, res) {
 async function signup(req, res) {
     try {
         console.log('req.body in auth.controller: ', req.body);
-        
-        const { username, password, fullName,imgUrl,isAdmin, joinAt, karma, position } = req.body
-        logger.debug(username + ", " + password + ', ' + fullName + ', ' + imgUrl + ', ' + isAdmin+ ', ' + joinAt+ ', ' + karma+ ', ' + position)
-        const account = await authService.signup(username, password, fullName,imgUrl,isAdmin, joinAt, karma, position)
+
+        const { username, password, fullName, imgUrl, isAdmin, joinAt, karma, position } = req.body
+        logger.debug(username + ", " + password + ', ' + fullName + ', ' + imgUrl + ', ' + isAdmin + ', ' + joinAt + ', ' + karma + ', ' + position)
+        const account = await authService.signup(username, password, fullName, imgUrl, isAdmin, joinAt, karma, position)
         logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
         const user = await authService.login(username, password)
         req.session.user = user
@@ -29,7 +29,7 @@ async function signup(req, res) {
     }
 }
 
-async function logout(req, res){
+async function logout(req, res) {
     try {
         req.session.destroy()
         res.send({ message: 'logged out successfully' })
