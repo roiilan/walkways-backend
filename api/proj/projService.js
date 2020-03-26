@@ -27,13 +27,13 @@ async function query(filterBy = {}) {
         const projs = await collection.find(criteria).collation({ locale: "en" })
             .sort(sortObj).toArray();
 
-        // console.log('criteria', criteria);
+        // ('criteria', criteria);
 
-        // console.log('BACKED PROJSERVICE', projs);
+        // ('BACKED PROJSERVICE', projs);
 
         return projs
     } catch (err) {
-        console.log('ERROR: cannot find projs')
+        ('ERROR: cannot find projs')
         throw err;
     }
 }
@@ -51,7 +51,7 @@ async function getById(projId) {
         })
         return proj
     } catch (err) {
-        console.log(`ERROR: while finding proj ${projId}`)
+        (`ERROR: while finding proj ${projId}`)
         throw err;
     }
 }
@@ -61,7 +61,7 @@ async function getByEmail(email) {
         const proj = await collection.findOne({ email })
         return proj
     } catch (err) {
-        console.log(`ERROR: while finding proj ${email}`)
+        (`ERROR: while finding proj ${email}`)
         throw err;
     }
 }
@@ -71,7 +71,7 @@ async function remove(projId) {
     try {
         await collection.deleteOne({ "_id": ObjectId(projId) })
     } catch (err) {
-        console.log(`ERROR: cannot remove proj ${projId}`)
+        (`ERROR: cannot remove proj ${projId}`)
         throw err;
     }
 }
@@ -81,11 +81,11 @@ async function update(proj) {
     proj._id = ObjectId(proj._id);
     try {
         await collection.replaceOne({ "_id": proj._id }, { $set: proj })
-        // console.log('backend proj', proj);
+        // ('backend proj', proj);
 
         return proj
     } catch (err) {
-        console.log(`ERROR: cannot update proj ${proj._id}`)
+        (`ERROR: cannot update proj ${proj._id}`)
         throw err;
     }
 }
@@ -96,13 +96,13 @@ async function add(proj) {
         await collection.insertOne(proj);
         return proj;
     } catch (err) {
-        console.log(`ERROR: cannot insert proj`)
+        (`ERROR: cannot insert proj`)
         throw err;
     }
 }
 
 function _buildCriteria(filterBy) {
-    console.log('filter in back service', filterBy);
+    // ('filter in back service', filterBy);
 
     const criteria = {};
     if (filterBy.name) criteria.name = { $regex: filterBy.name }
@@ -115,6 +115,6 @@ function _buildCriteria(filterBy) {
         criteria.type = filterBy.category
 
     }
-    console.log('criteria in back service', criteria);
+    // ('criteria in back service', criteria);
     return criteria;
 }

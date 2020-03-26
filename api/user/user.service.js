@@ -86,8 +86,8 @@ async function update(user) {
     }
 }
 async function add(user) {
+// console.log(user,'UUUUUUUUUSER')
     const collection = await dbService.getCollection('users')
-
     try {
         await collection.insertOne(user);
         return user;
