@@ -44,7 +44,7 @@ async function getById(projId) {
         const proj = await collection.findOne({ "_id": ObjectId(projId) })
         delete proj.password
 
-        proj.givenReviews = await reviewService.query({ byPojId: ObjectId(proj._id) })
+        proj.givenReviews = await reviewService.query({ byProjId: ObjectId(proj._id) })
         proj.givenReviews = proj.givenReviews.map(review => {
             delete review.byPoj
             return review

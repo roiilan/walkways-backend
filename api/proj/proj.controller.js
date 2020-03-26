@@ -17,10 +17,7 @@ async function deletePoj(req, res) {
 
 async function updatePoj(req, res) {
     const proj = req.body;
-
     await projService.update(proj)
-        ('controller ', proj);
-
     res.send(proj)
 }
 

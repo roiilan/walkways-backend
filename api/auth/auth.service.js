@@ -18,12 +18,13 @@ async function login(username, password) {
     return user;
 }
 
-async function signup({ username, password, fullName, imgUrl, isAdmin }) {
+async function signup(username, password, fullName, imgUrl, isAdmin, joinAt, karma, position) {
+    console.log('signupPPPPPPPP', username, password, fullName, imgUrl, isAdmin, joinAt, karma, position)
+        // logger.debug(`auth.service - signup with username: ${username}, username: ${username}`)
     if (!fullName || !password || !username) return Promise.reject('fullName, username and password are required!')
     logger.debug(`auth.service - signup with username: ${username}`)
     const hash = await bcrypt.hash(password, saltRounds)
-        // return userService.add({fullName, password: hash, username})
-    return userService.add({ username, password: hash, fullName, imgUrl, isAdmin })
+    return userService.add({ fullName, password: hash, username, imgUrl, isAdmin, joinAt, karma, position })
 }
 
 
