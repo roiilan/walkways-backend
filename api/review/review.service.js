@@ -3,8 +3,6 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy = {}) {
-    console.log('filterBy in review service:', filterBy);
-    
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
@@ -85,9 +83,12 @@ async function add(review) {
 async function update(review){
     const collection = await dbService.getCollection('review')
     review._id = ObjectId(review._id);
+    review.by._id = ObjectId(review.by._id);
+    review.about._id = ObjectId(review.about._id);
     try {
         await collection.replaceOne({ "_id": review._id }, { $set: review })
         // console.log('backend review', review);
+console.log('review in backend in review service line 89:', review);
 
         return review
     } catch (err) {
