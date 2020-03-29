@@ -5,11 +5,6 @@ const reviewService = require('./review.service')
 
 async function getReviews(req, res) {
     try {
-        console.log('req.query line 8:', req.query);
-        console.log('req.params line 9:', req.params.id);
-        // const id = {id: ObjectId(req.params.id) }
-        // console.log(id);
-        
         const reviews = await reviewService.query({id: req.params.id})
         res.json(reviews)
     } catch (err) {
@@ -26,6 +21,7 @@ async function deleteReview(req, res) {
 
 async function addReview(req, res) {
     var review = req.body;
+    console.log('review in controller:', review);
     
     // review.byUserId = req.session.user._id;
     review = await reviewService.add(review)
