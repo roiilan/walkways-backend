@@ -3,22 +3,26 @@ module.exports = connectSockets
 function connectSockets(io) {
     io.on('connection', socket => {
         socket.on('applyToProj', request => {
-            console.log(request);
+            console.log('room:', io.sockets.adapter.rooms);
 
+            console.log('yovel', request);
+            //TODO go to service and update proj
             // io.emit('chat addMsg', msg)
             // emits only to sockets in the same room
-            io.to(socket.myTopic).emit('send request', request)
+            socket.broadcast.to(request.projOwnerId).emit('send request', request)
         })
-        socket.on('proj topic', topic => {
 
-                if (socket.myTopic) {
-                    socket.leave(socket.myTopic)
-                }
-                socket.join(topic)
-                socket.myTopic = topic;
-            })
-            // socket.on('writingUser', ({ from, topic }) => {
-            //     socket.broadcast.emit('typing', { from, topic })
-            // })
+        socket.on('user topic', topic => {
+            console.log('user', topic);
+            socket.id = topic
+            if (socket.myTopic) {
+                socket.leave(socket.myTopic)
+            }
+            socket.join(topic)
+            socket.myTopic = topic;
+            console.log('hasama', socket.myTopic);
+
+        })
+
     })
 }
