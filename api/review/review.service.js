@@ -1,52 +1,14 @@
-
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy = {}) {
+    console.log('mila', filterBy);
+
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
         // const reviews = await collection.find().toArray();
         const reviews = await collection.find(criteria).toArray();
-        // var reviews = await collection.aggregate([
-        //     {
-        //         $match: filterBy
-        //     },
-        //     {
-        //         $lookup:
-        //         {
-        //             from: 'user',
-        //             localField: 'byId',
-        //             foreignField: '_id',
-        //             as: 'by'
-        //         }
-        //     }, 
-        //     {
-        //         $unwind: '$by'
-        //     },
-        //     {
-        //         $lookup:
-        //         {
-        //             from: 'user',
-        //             localField: 'aboutId',
-        //             foreignField: '_id',
-        //             as: 'about'
-        //         }
-        //     }, 
-        //     {
-        //         $unwind: '$about'
-        //     }
-        // ]).toArray()
-
-        // reviews = reviews.map(review => {
-        //     console.log('review in review service: ', review);
-            
-        //     review.by = {_id: review.by._id, username: review.by.username}
-        //     review.about = {_id: review.about._id, username: review.about.username}
-        //     delete review.byId;
-        //     delete review.aboutId;
-        //     return review;
-        // })
 
         return reviews
     } catch (err) {
@@ -58,7 +20,7 @@ async function query(filterBy = {}) {
 async function remove(reviewId) {
     const collection = await dbService.getCollection('review')
     try {
-        await collection.deleteOne({"_id":ObjectId(reviewId)})
+        await collection.deleteOne({ "_id": ObjectId(reviewId) })
     } catch (err) {
         console.log(`ERROR: cannot remove review ${reviewId}`)
         throw err;
@@ -80,15 +42,15 @@ async function add(review) {
     }
 }
 
-async function update(review){
+async function update(review) {
     const collection = await dbService.getCollection('review')
     review._id = ObjectId(review._id);
     review.by._id = ObjectId(review.by._id);
     review.about._id = ObjectId(review.about._id);
     try {
         await collection.replaceOne({ "_id": review._id }, { $set: review })
-        // console.log('backend review', review);
-console.log('review in backend in review service line 89:', review);
+            // console.log('backend review', review);
+        console.log('review in backend in review service line 89:', review);
 
         return review
     } catch (err) {
@@ -98,7 +60,7 @@ console.log('review in backend in review service line 89:', review);
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = {'about._id':ObjectId(filterBy.id)};
+    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
     return criteria;
 }
 
@@ -108,5 +70,3 @@ module.exports = {
     add,
     update
 }
-
-
