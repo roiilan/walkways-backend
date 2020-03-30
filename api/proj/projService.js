@@ -27,16 +27,35 @@ async function query(filterBy = {}) {
         const projs = await collection.find(criteria).collation({ locale: "en" })
             .sort(sortObj).toArray();
 
-        // ('criteria', criteria);
-
-        // ('BACKED PROJSERVICE', projs);
-
         return projs
     } catch (err) {
-        ('ERROR: cannot find projs')
+        console.log('ERROR: cannot find projs')
         throw err;
     }
 }
+
+
+// async function query(filterBy = {}) {
+
+//     const criteria = _buildCriteria(filterBy)
+//     const collection = await dbService.getCollection('projs')
+//     try {
+//         var sortObj = {}
+//         if (filterBy.sort) {
+//             if (filterBy.sort === 'name') {
+//                 sortObj = { name: 1 }
+//             } else {
+//                 sortObj = { price: 1 }
+//             }
+//         }
+//         const projs = await collection.find(criteria).collation({ locale: "en" })
+//             .sort(sortObj).toArray();
+//         return projs
+//     } catch (err) {
+//         ('ERROR: cannot find projs')
+//         throw err;
+//     }
+// }
 
 async function getById(projId) {
     const collection = await dbService.getCollection('projs')
