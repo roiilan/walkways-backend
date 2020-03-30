@@ -6,48 +6,7 @@ async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
-        // const reviews = await collection.find().toArray();
         const reviews = await collection.find(criteria).toArray();
-        // var reviews = await collection.aggregate([
-        //     {
-        //         $match: filterBy
-        //     },
-        //     {
-        //         $lookup:
-        //         {
-        //             from: 'user',
-        //             localField: 'byId',
-        //             foreignField: '_id',
-        //             as: 'by'
-        //         }
-        //     }, 
-        //     {
-        //         $unwind: '$by'
-        //     },
-        //     {
-        //         $lookup:
-        //         {
-        //             from: 'user',
-        //             localField: 'aboutId',
-        //             foreignField: '_id',
-        //             as: 'about'
-        //         }
-        //     }, 
-        //     {
-        //         $unwind: '$about'
-        //     }
-        // ]).toArray()
-
-        // reviews = reviews.map(review => {
-        //     console.log('review in review service: ', review);
-            
-        //     review.by = {_id: review.by._id, username: review.by.username}
-        //     review.about = {_id: review.about._id, username: review.about.username}
-        //     delete review.byId;
-        //     delete review.aboutId;
-        //     return review;
-        // })
-
         return reviews
     } catch (err) {
         console.log('ERROR: cannot find reviews')
@@ -98,7 +57,9 @@ console.log('review in backend in review service line 89:', review);
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = {'about._id':ObjectId(filterBy.id)};
+    const criteria = (filterBy)
+    ? {'about._id':ObjectId(filterBy.id)}
+    : {}
     return criteria;
 }
 
