@@ -9,7 +9,7 @@ function connectSockets(io) {
             //TODO go to service and update proj
             // io.emit('chat addMsg', msg)
             // emits only to sockets in the same room
-            io.sockets.socket(request.projOwnerId).emit('send request', request)
+            io.to(request.projOwnerId).emit('send request', request)
         })
 
         socket.on('user topic', topic => {
