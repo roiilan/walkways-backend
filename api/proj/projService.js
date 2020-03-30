@@ -27,6 +27,20 @@ async function query(filterBy = {}) {
         const projs = await collection.find(criteria).collation({ locale: "en" })
             .sort(sortObj).toArray();
 
+        //     await projs.forEach(async proj=> {
+        //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
+        //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
+        //     console.log(proj.rate, 'proj.rate');
+        //     console.log(givenReviews.length, 'givenReviews.length');
+            
+        // })
+        // projs.forEach(async proj=> {
+        //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
+        //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
+        //     console.log(proj.rate, 'proj.rate');
+        //     console.log(givenReviews.length, 'givenReviews.length');
+            
+        // })
         // ('criteria', criteria);
 
         // ('BACKED PROJSERVICE', projs);
@@ -44,11 +58,9 @@ async function getById(projId) {
         const proj = await collection.findOne({ "_id": ObjectId(projId) })
         delete proj.password
 
-        proj.givenReviews = await reviewService.query({ byProjId: ObjectId(proj._id) })
-        proj.givenReviews = proj.givenReviews.map(review => {
-            delete review.byPoj
-            return review
-        })
+        var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
+        proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
+
         return proj
     } catch (err) {
         (`ERROR: while finding proj ${projId}`)
