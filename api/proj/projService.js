@@ -56,8 +56,6 @@ async function getById(projId) {
     const collection = await dbService.getCollection('projs')
     try {
         const proj = await collection.findOne({ "_id": ObjectId(projId) })
-        delete proj.password
-
         var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
         proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
 
