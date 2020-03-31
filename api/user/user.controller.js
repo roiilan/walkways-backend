@@ -1,6 +1,8 @@
 const userService = require('./user.service')
 
 async function getUser(req, res) {
+    console.log('req.params.id:', req.params.id);
+    
     const user = await userService.getById(req.params.id)
     res.send(user)
 }
