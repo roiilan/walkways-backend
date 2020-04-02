@@ -22,7 +22,6 @@ async function deleteReview(req, res) {
 
 async function addReview(req, res) {
     var review = req.body;
-    console.log('review in controller:', review);
 
     // review.byUserId = req.session.user._id;
     review = await reviewService.add(review)
@@ -34,7 +33,6 @@ async function addReview(req, res) {
 
 async function updateReview(req, res) {
     var review = req.body;
-    console.log('review in controller:', review);
 
     review = await reviewService.update(review)
     res.send(review)
