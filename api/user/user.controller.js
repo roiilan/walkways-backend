@@ -20,6 +20,7 @@ async function deleteUser(req, res) {
 
 async function updateUser(req, res) {
     const user = req.body;
+    
     await userService.update(user)
     res.send(user)
 }

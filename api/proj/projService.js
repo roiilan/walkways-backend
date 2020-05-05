@@ -16,30 +16,34 @@ async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
-        var sortObj = {}
-        if (filterBy.sort) {
-            if (filterBy.sort === 'name') {
-                sortObj = { name: 1 }
-            } else {
-                sortObj = { price: 1 }
-            }
-        }
-        const projs = await collection.find(criteria).collation({ locale: "en" })
-            .sort(sortObj).toArray();
+    console.log('criteria: ', criteria);
+
+        // var sortObj = {}
+        // if (filterBy.sort) {
+        //     if (filterBy.sort === 'name') {
+        //         sortObj = { name: 1 }
+        //     } else {
+        //         sortObj = { price: 1 }
+        //     }
+        // }
+        const projs = await collection.find(criteria).toArray();
+
+        // const projs = await collection.find(criteria).collation({ locale: "en" })
+            // .sort(sortObj).toArray();
 
         //     await projs.forEach(async proj=> {
         //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
         //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
         //     console.log(proj.rate, 'proj.rate');
         //     console.log(givenReviews.length, 'givenReviews.length');
-            
+
         // })
         // projs.forEach(async proj=> {
         //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
         //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
         //     console.log(proj.rate, 'proj.rate');
         //     console.log(givenReviews.length, 'givenReviews.length');
-            
+
         // })
         // ('criteria', criteria);
 
@@ -115,16 +119,29 @@ function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
 
     const criteria = {};
-    if (filterBy.name) criteria.name = { $regex: filterBy.name }
-
-    if (filterBy.inStock === 'true') {
-        criteria.inStock = true
+    if (filterBy.name) {
+        criteria.$or = [{title: { $regex: filterBy.name, $options: "i" }}, {description: { $regex: filterBy.name, $options: "i" }}, {organization: { $regex: filterBy.name, $options: "i" }}]
+        // if (filterBy.name) criteria.name = { $regex: filterBy.name }
+    }
+    if (filterBy.categories) {
+        criteria.category = { $in: filterBy.categories.split(',') }
+    }
+    if (filterBy.tags) {
+        criteria.tags = { $all: filterBy.tags.split(',') }
+    }
+    if (filterBy.startAt !== 'null' && filterBy.startAt !== undefined) {
+        console.log(filterBy.startAt, '/////////////////////////////////filterBy.startAt');
+        
+        criteria.startAt = {  $ite: +filterBy.startAt }
+    }
+    if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
+        criteria.endsAt = { $gte: +filterBy.endsAt }
     }
 
-    if (filterBy.category !== 'all') {
-        criteria.type = filterBy.category
+    // if (filterBy.category !== 'all') {
+    //     criteria.type = filterBy.category
 
-    }
+    // }
     // ('criteria in back service', criteria);
     return criteria;
 }

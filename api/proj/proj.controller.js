@@ -1,37 +1,37 @@
 const projService = require('./projService')
 
-async function getPoj(req, res) {
+async function getProj(req, res) {
     const proj = await projService.getById(req.params.id)
     res.send(proj)
 }
 
-async function getPojs(req, res) {
+async function getProjs(req, res) {
     const projs = await projService.query(req.query)
     res.send(projs)
 }
 
-async function deletePoj(req, res) {
+async function deleteProj(req, res) {
     await projService.remove(req.params.id)
     res.end()
 }
 
-async function updatePoj(req, res) {
+async function updateProj(req, res) {
     const proj = req.body;
     await projService.update(proj)
     res.send(proj)
 }
 
 
-async function addPoj(req, res) {
+async function addProj(req, res) {
     const proj = req.body;
     await projService.add(proj)
     res.send(proj)
 }
 
 module.exports = {
-    getPoj,
-    getPojs,
-    deletePoj,
-    updatePoj,
-    addPoj
+    getProj,
+    getProjs,
+    deleteProj,
+    updateProj,
+    addProj
 }
