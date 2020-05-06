@@ -11,75 +11,25 @@ module.exports = {
     add
 }
 
-async function query(filterBy = {}) {
-
+async function query(filterBy = {}, limit = null) {
+    
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
-    console.log('criteria: ', criteria);
-
-        // var sortObj = {}
-        // if (filterBy.sort) {
-        //     if (filterBy.sort === 'name') {
-        //         sortObj = { name: 1 }
-        //     } else {
-        //         sortObj = { price: 1 }
-        //     }
-        // }
-        const projs = await collection.find(criteria).toArray();
-console.log(projs);
-  
-        // const projs = await collection.find(criteria).collation({ locale: "en" })
-            // .sort(sortObj).toArray();
-
-        //     await projs.forEach(async proj=> {
-        //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
-        //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
-        //     console.log(proj.rate, 'proj.rate');
-        //     console.log(givenReviews.length, 'givenReviews.length');
-
-        // })
-        // projs.forEach(async proj=> {
-        //     var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
-        //     proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
-        //     console.log(proj.rate, 'proj.rate');
-        //     console.log(givenReviews.length, 'givenReviews.length');
-
-        // })
-        // ('criteria', criteria);
-
-        // ('BACKED PROJSERVICE', projs);
-
+        console.log('criteria: ', criteria);
+        var projs;
+        if (filterBy.limit) {
+            limit = filterBy.limit
+            projs = await collection.aggregate([{$sample: {size: +limit}}]).toArray();
+        } else {
+            projs = await collection.find(criteria).toArray();
+        }
         return projs
     } catch (err) {
         console.log('ERROR: cannot find projs', err)
         throw err;
     }
 }
-
-
-// async function query(filterBy = {}) {
-
-//     const criteria = _buildCriteria(filterBy)
-//     const collection = await dbService.getCollection('projs')
-//     try {
-//         var sortObj = {}
-//         if (filterBy.sort) {
-//             if (filterBy.sort === 'name') {
-//                 sortObj = { name: 1 }
-//             } else {
-//                 sortObj = { price: 1 }
-//             }
-//         }
-//         const projs = await collection.find(criteria).collation({ locale: "en" })
-//             .sort(sortObj).toArray();
-//         return projs
-//     } catch (err) {
-//         ('ERROR: cannot find projs')
-//         throw err;
-//     }
-// }
-
 async function getById(projId) {
     const collection = await dbService.getCollection('projs')
     try {
@@ -119,8 +69,6 @@ async function update(proj) {
     proj._id = ObjectId(proj._id);
     try {
         await collection.replaceOne({ "_id": proj._id }, { $set: proj })
-        // ('backend proj', proj);
-
         return proj
     } catch (err) {
         (`ERROR: cannot update proj ${proj._id}`)
@@ -145,8 +93,7 @@ function _buildCriteria(filterBy) {
 
     const criteria = {};
     if (filterBy.name) {
-        criteria.$or = [{title: { $regex: filterBy.name, $options: "i" }}, {description: { $regex: filterBy.name, $options: "i" }}, {organization: { $regex: filterBy.name, $options: "i" }}]
-        // if (filterBy.name) criteria.name = { $regex: filterBy.name }
+        criteria.$or = [{ title: { $regex: filterBy.name, $options: "i" } }, { description: { $regex: filterBy.name, $options: "i" } }, { organization: { $regex: filterBy.name, $options: "i" } }]
     }
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
@@ -162,11 +109,5 @@ function _buildCriteria(filterBy) {
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
         criteria.endsAt = { $lte : +filterBy.endsAt }
     }
-
-    // if (filterBy.category !== 'all') {
-    //     criteria.type = filterBy.category
-
-    // }
-    // ('criteria in back service', criteria);
     return criteria;
 }
