@@ -27,7 +27,8 @@ async function query(filterBy = {}) {
         //     }
         // }
         const projs = await collection.find(criteria).toArray();
-
+console.log(projs);
+  
         // const projs = await collection.find(criteria).collation({ locale: "en" })
             // .sort(sortObj).toArray();
 
@@ -51,7 +52,7 @@ async function query(filterBy = {}) {
 
         return projs
     } catch (err) {
-        console.log('ERROR: cannot find projs')
+        console.log('ERROR: cannot find projs', err)
         throw err;
     }
 }
@@ -140,6 +141,7 @@ async function add(proj) {
 
 function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
+    
 
     const criteria = {};
     if (filterBy.name) {
@@ -155,10 +157,10 @@ function _buildCriteria(filterBy) {
     if (filterBy.startAt !== 'null' && filterBy.startAt !== undefined) {
         console.log(filterBy.startAt, '/////////////////////////////////filterBy.startAt');
         
-        criteria.startAt = {  $ite: +filterBy.startAt }
+        criteria.startAt = { $gte: +filterBy.startAt }
     }
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
-        criteria.endsAt = { $gte: +filterBy.endsAt }
+        criteria.endsAt = { $lte : +filterBy.endsAt }
     }
 
     // if (filterBy.category !== 'all') {
