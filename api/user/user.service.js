@@ -32,10 +32,8 @@ console.log('userId:', userId);
 
     try {
         const user = await collection.findOne({ "_id": ObjectId(userId) })
-        console.log(' in service', user);
         
         delete user.password
-        console.log(' in service after delete password', user);
 
         // user.givenReviews = await reviewService.query({id: ObjectId(user._id) })
         // user.givenReviews = user.givenReviews.map(review => {
