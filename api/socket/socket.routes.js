@@ -13,15 +13,15 @@ function connectSockets(io) {
             // console.log(request, 'request//////////////////////////////');
             
             //Save to data base(push request into creator notification)
-            userService.getById(request.to._id)
-            // userService.getById(request.projOwnerId)
-                .then(user => {
-                    // var projOwner = user
-                    // projOwner.notifications.push(request)
-                    // userService.update(projOwner)
-                    user.notifications.push(request)
-                    userService.update(user)
-                })
+            // userService.getById(request.to._id)
+            // // userService.getById(request.projOwnerId)
+            //     .then(user => {
+            //         // var projOwner = user
+            //         // projOwner.notifications.push(request)
+            //         // userService.update(projOwner)
+            //         user.notifications.push(request)
+            //         userService.update(user)
+            //     })
                 // userService.update(user)
 
                 io.emit(request.to._id, request)
