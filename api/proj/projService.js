@@ -21,6 +21,8 @@ async function query(filterBy = {}, limit = null) {
         if (filterBy.limit) {
             limit = filterBy.limit
             projs = await collection.aggregate([{$sample: {size: +limit}}]).toArray();
+            const count = await collection.find({}).count();
+            return {projs, count}
         } else {
             projs = await collection.find(criteria).toArray();
         }
@@ -102,8 +104,6 @@ function _buildCriteria(filterBy) {
         criteria.tags = { $all: filterBy.tags.split(',') }
     }
     if (filterBy.startAt !== 'null' && filterBy.startAt !== undefined) {
-        console.log(filterBy.startAt, '/////////////////////////////////filterBy.startAt');
-        
         criteria.startAt = { $gte: +filterBy.startAt }
     }
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
