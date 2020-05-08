@@ -28,7 +28,6 @@ async function query(filterBy = {}) {
 
 async function getById(userId) {
     const collection = await dbService.getCollection('users')
-console.log('userId:', userId);
 
     try {
         const user = await collection.findOne({ "_id": ObjectId(userId) })
@@ -63,8 +62,6 @@ async function getByUsername(username) {
 
 async function remove(userId) {
     const collection = await dbService.getCollection('users')
-    console.log('userId in userService of backend', userId);
-
     try {
         await collection.deleteOne({ "_id": ObjectId(userId) })
     } catch (err) {
