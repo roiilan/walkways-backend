@@ -26,20 +26,23 @@ function connectSockets(io) {
                 // io.to(socket.myTopic).emit(request.to._id, request)
         })
         socket.on('decline', notification => {
+
+            io.emit(`decline ${notification.from._id}`, notification)
             io.emit(`decline ${notification.to._id}`, notification)
         })
         socket.on('approve', notification => {
+
+            io.emit(`approve ${notification.from._id}`, notification)
             io.emit(`approve ${notification.to._id}`, notification)
         })
-        socket.on('user topic', topic => {
-            // socket.id = topic
-            if (socket.userTopic) {
-                socket.leave(socket.userTopic)
-            }
-            socket.join(topic)
-            socket.userTopic = topic;
-
-        })
+        // socket.on('user topic', topic => {
+        //     // socket.id = topic
+        //     if (socket.userTopic) {
+        //         socket.leave(socket.userTopic)
+        //     }
+        //     socket.join(topic)
+        //     socket.userTopic = topic;
+        // })
 
         socket.on('chat newMsg', msg=>{
             io.to(socket.myTopic).emit('chat addMsg', msg)
