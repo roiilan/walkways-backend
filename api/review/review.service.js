@@ -14,7 +14,7 @@ async function getReviewsCount() {
 }
 
 async function query(filterBy = {}) {
-    console.log(filterBy.id.toString(), 'filterBy////////////////////////////////');
+    // console.log(filterBy.id.toString(), 'filterBy////////////////////////////////');
 
     const criteria = _buildCriteria(filterBy)
     console.log('in service', filterBy);
@@ -22,7 +22,7 @@ async function query(filterBy = {}) {
     const collection = await dbService.getCollection('review')
     try {
         const reviews = await collection.find(criteria).toArray();
-        console.log(reviews, 'reviews////////////////////////////////');
+        // console.log(reviews, 'reviews////////////////////////////////');
 
         return reviews
     } catch (err) {
@@ -73,7 +73,7 @@ async function update(review) {
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id.toString()) } : {}
+    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
         // console.log(criteria, 'criteria////////////////////////////////');
 
     return criteria;
