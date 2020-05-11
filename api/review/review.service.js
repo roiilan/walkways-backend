@@ -1,12 +1,27 @@
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
+
+async function getReviewsCount() {
+    const collection = await dbService.getCollection('review')
+
+    try {
+        return await collection.find().count()
+    } catch (err) {
+        console.log('ERROR: cannot find count reviews')
+        throw err;
+    }
+}
+
 async function query(filterBy = {}) {
+    console.log(filterBy.id.toString(), 'filterBy////////////////////////////////');
 
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
         const reviews = await collection.find(criteria).toArray();
+    console.log(reviews, 'reviews////////////////////////////////');
+
         return reviews
     } catch (err) {
         console.log('ERROR: cannot find reviews')
@@ -56,7 +71,9 @@ async function update(review) {
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
+    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id.toString()) } : {}
+    // console.log(criteria, 'criteria////////////////////////////////');
+    
     return criteria;
 }
 
@@ -64,5 +81,6 @@ module.exports = {
     query,
     remove,
     add,
-    update
+    update,
+    getReviewsCount
 }
