@@ -4,10 +4,16 @@ const reviewService = require('./review.service')
 // TODO: needs error handling! try, catch
 
 async function getReviews(req, res) {
-    
-    try {        
-        const reviews = await reviewService.query(req.params)        
-        res.json(reviews)
+    try {
+        if (req.params.id === 'count') {
+            const reviewsCount = await reviewService.getReviewsCount()
+            res.json(reviewsCount)
+        } else {
+
+            const reviews = await reviewService.query(req.params)
+                // console.log(reviews, 'reviews');
+            res.json(reviews)
+        }
     } catch (err) {
         logger.error('Cannot get reviews', err);
         res.status(500).send({ error: 'cannot get reviews' })
