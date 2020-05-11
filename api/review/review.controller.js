@@ -4,9 +4,9 @@ const reviewService = require('./review.service')
 // TODO: needs error handling! try, catch
 
 async function getReviews(req, res) {
-    try {
-
-        const reviews = await reviewService.query(req.params)
+    
+    try {        
+        const reviews = await reviewService.query(req.params)        
         res.json(reviews)
     } catch (err) {
         logger.error('Cannot get reviews', err);

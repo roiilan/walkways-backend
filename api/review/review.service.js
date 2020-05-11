@@ -2,11 +2,15 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy = {}) {
-
+    
+      
     const criteria = _buildCriteria(filterBy)
+    console.log('in service',filterBy);
+    
     const collection = await dbService.getCollection('review')
     try {
-        const reviews = await collection.find(criteria).toArray();
+        const reviews = await collection.find(criteria).toArray();        
+        
         return reviews
     } catch (err) {
         console.log('ERROR: cannot find reviews')
@@ -57,6 +61,7 @@ async function update(review) {
 
 function _buildCriteria(filterBy) {
     const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
+    
     return criteria;
 }
 
