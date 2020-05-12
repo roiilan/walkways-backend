@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.3fffe91723342769c49339d60d642c07.js"
+  "/precache-manifest.651b2f9b55d91aaa9b00fdabc1e931df.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "walkways"});
