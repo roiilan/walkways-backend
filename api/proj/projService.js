@@ -94,6 +94,13 @@ function _buildCriteria(filterBy) {
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
+    console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
+    
+    if (filterBy.creators) {
+        console.log(filterBy.creators.split(','), 'filterBy.creators.split(\',\')');
+        
+        criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
+    }
     if (filterBy.tags) {
         criteria.tags = { $all: filterBy.tags.split(',') }
     }
