@@ -19,7 +19,10 @@ async function query(filterBy = {}, limit = null) {
             limit = filterBy.limit
             return await collection.aggregate([{$sample: {size: +limit}}]).toArray();
         } else {
-            return await collection.find(criteria).toArray();
+            const projs = await collection.find(criteria).toArray();
+            console.log(projs, 'projs///// in service proj');
+            
+            return projs
         }
     } catch (err) {
         console.log('ERROR: cannot find projs', err)
@@ -87,18 +90,15 @@ function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
     
 
-    const criteria = {};
+    var criteria = {};
     if (filterBy.name) {
         criteria.$or = [{ title: { $regex: filterBy.name, $options: "i" } }, { description: { $regex: filterBy.name, $options: "i" } }, { organization: { $regex: filterBy.name, $options: "i" } }]
     }
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
-    console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
-    
+  
     if (filterBy.creators) {
-        console.log(filterBy.creators.split(','), 'filterBy.creators.split(\',\')');
-        
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
     }
     if (filterBy.tags) {
@@ -109,6 +109,10 @@ function _buildCriteria(filterBy) {
     }
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
         criteria.endsAt = { $lte : +filterBy.endsAt }
+    }
+    if (filterBy.id) {
+        criteria = {'createdBy._id': ObjectId(filterBy.id.toString())}
+        console.log(criteria, 'criteria');
     }
     return criteria;
 }
