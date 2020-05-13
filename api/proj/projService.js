@@ -12,19 +12,19 @@ module.exports = {
 }
 
 async function query(filterBy = {}, limit = null) {
-    console.log(filterBy,'dfsssssssssssssssssssssssssss');
-    
+    console.log(filterBy, 'dfsssssssssssssssssssssssssss');
+
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
         if (filterBy.limit) {
             limit = filterBy.limit
-            return await collection.aggregate([{$sample: {size: +limit}}]).toArray();
+            return await collection.aggregate([{ $sample: { size: +limit } }]).toArray();
         } else {
-         console.log(criteria,'criteriaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-         console.log(await collection.find(criteria).toArray());
-         
-            return await collection.find(criteria).toArray();
+            const projs = await collection.find(criteria).toArray();
+            console.log(projs, 'projs///// in service proj');
+
+            return projs
         }
     } catch (err) {
         console.log('ERROR: cannot find projs', err)
@@ -90,13 +90,9 @@ async function add(proj) {
 
 function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
-    
+
 
     var criteria = {};
-    // if (filterBy.id) {
-    //     criteria.id = {'createdBy._id': ObjectId(filterBy.id.toString())}
-    //     console.log(criteria, 'criteria');
-    // }
     if (filterBy.name) {
         criteria.$or = [{ title: { $regex: filterBy.name, $options: "i" } }, { description: { $regex: filterBy.name, $options: "i" } }, { organization: { $regex: filterBy.name, $options: "i" } }]
     }
@@ -104,9 +100,9 @@ function _buildCriteria(filterBy) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
     // console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
-    
+
     if (filterBy.creators) {
-        console.log(filterBy.creators,'creatorssssssssss');      
+        console.log(filterBy.creators, 'creatorssssssssss');
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
     }
     if (filterBy.tags) {
@@ -116,7 +112,11 @@ function _buildCriteria(filterBy) {
         criteria.startAt = { $gte: +filterBy.startAt }
     }
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
-        criteria.endsAt = { $lte : +filterBy.endsAt }
+        criteria.endsAt = { $lte: +filterBy.endsAt }
+    }
+    if (filterBy.id) {
+        criteria = { 'createdBy._id': ObjectId(filterBy.id.toString()) }
+        console.log(criteria, 'criteria');
     }
     return criteria;
 }

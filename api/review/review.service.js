@@ -74,7 +74,7 @@ async function update(review) {
 
 function _buildCriteria(filterBy) {
     const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
-        // console.log(criteria, 'criteria////////////////////////////////');
+        console.log(criteria, 'criteria////////////////////////////////');
 
     return criteria;
 }
