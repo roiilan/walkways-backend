@@ -12,6 +12,8 @@ module.exports = {
 }
 
 async function query(filterBy = {}, limit = null) {
+    console.log(filterBy,'dfsssssssssssssssssssssssssss');
+    
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
@@ -19,6 +21,9 @@ async function query(filterBy = {}, limit = null) {
             limit = filterBy.limit
             return await collection.aggregate([{$sample: {size: +limit}}]).toArray();
         } else {
+         console.log(criteria,'criteriaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+         console.log(await collection.find(criteria).toArray());
+         
             return await collection.find(criteria).toArray();
         }
     } catch (err) {
@@ -87,18 +92,21 @@ function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
     
 
-    const criteria = {};
+    var criteria = {};
+    // if (filterBy.id) {
+    //     criteria.id = {'createdBy._id': ObjectId(filterBy.id.toString())}
+    //     console.log(criteria, 'criteria');
+    // }
     if (filterBy.name) {
         criteria.$or = [{ title: { $regex: filterBy.name, $options: "i" } }, { description: { $regex: filterBy.name, $options: "i" } }, { organization: { $regex: filterBy.name, $options: "i" } }]
     }
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
-    console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
+    // console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
     
     if (filterBy.creators) {
-        console.log(filterBy.creators.split(','), 'filterBy.creators.split(\',\')');
-        
+        console.log(filterBy.creators,'creatorssssssssss');      
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
     }
     if (filterBy.tags) {
