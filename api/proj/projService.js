@@ -20,7 +20,7 @@ async function query(filterBy = {}, limit = null) {
             return await collection.aggregate([{$sample: {size: +limit}}]).toArray();
         } else {
             const projs = await collection.find(criteria).toArray();
-            console.log(projs, 'projs///// in service proj');
+            // console.log(projs, 'projs ///// in query proj');
             
             return projs
         }
@@ -100,6 +100,7 @@ function _buildCriteria(filterBy) {
   
     if (filterBy.creators) {
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
+        console.log(criteria, 'criteria after creators////////////');
     }
     if (filterBy.tags) {
         criteria.tags = { $all: filterBy.tags.split(',') }
