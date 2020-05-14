@@ -25,9 +25,8 @@ app.use(session({
     cookie: { secure: false }
 }))
 
+app.use(express.static(path.resolve(__dirname, 'public')));
 if (process.env.NODE_ENV === 'production') {
-
-    app.use(express.static(path.resolve(__dirname, 'public')));
 
 } else {
     const corsOptions = {
