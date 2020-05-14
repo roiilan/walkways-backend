@@ -12,16 +12,16 @@ module.exports = {
 }
 
 async function query(filterBy = {}, limit = null) {
+    console.log('dfsssssssssssssssssssssssssss',filterBy);
+
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
         if (filterBy.limit) {
             limit = filterBy.limit
-            return await collection.aggregate([{$sample: {size: +limit}}]).toArray();
+            return await collection.aggregate([{ $sample: { size: +limit } }]).toArray();
         } else {
             const projs = await collection.find(criteria).toArray();
-            // console.log(projs, 'projs ///// in query proj');
-            
             return projs
         }
     } catch (err) {
@@ -88,7 +88,7 @@ async function add(proj) {
 
 function _buildCriteria(filterBy) {
     // ('filter in back service', filterBy);
-    
+
 
     var criteria = {};
     if (filterBy.name) {
@@ -97,7 +97,8 @@ function _buildCriteria(filterBy) {
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
-  
+    // console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
+
     if (filterBy.creators) {
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
         console.log(criteria, 'criteria after creators////////////');
@@ -109,11 +110,11 @@ function _buildCriteria(filterBy) {
         criteria.startAt = { $gte: +filterBy.startAt }
     }
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
-        criteria.endsAt = { $lte : +filterBy.endsAt }
+        criteria.endsAt = { $lte: +filterBy.endsAt }
     }
-    if (filterBy.id) {
-        criteria = {'createdBy._id': ObjectId(filterBy.id.toString())}
-        console.log(criteria, 'criteria');
-    }
+    // if (filterBy.id) {
+    //     criteria = { 'createdBy._id': ObjectId(filterBy.id.toString()) }
+    //     console.log(criteria, 'criteria');
+    // }
     return criteria;
 }
