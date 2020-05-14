@@ -2,6 +2,9 @@
   "name": "proj-mister-proj",
   "version": "1.0.0",
   "main": "server.js",
+  "engines": {
+    "node": "12.16.x"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
