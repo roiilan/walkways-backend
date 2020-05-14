@@ -4,6 +4,8 @@ const userService = require('../user/user.service')
 function connectSockets(io) {
     io.on('connection', socket => {
         socket.on('applyToProj', request => {
+            console.log('requestttttttttttttt', request);
+            
             //TODO go to service and update proj
             // io.emit('chat addMsg', msg)
             // emits only to sockets in the same room
