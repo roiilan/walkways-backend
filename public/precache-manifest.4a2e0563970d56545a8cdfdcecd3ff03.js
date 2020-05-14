@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ef5f1039dec1930a6547",
-    "url": "/css/app.d4a9dd54.css"
+    "revision": "6ecf63876d5e732acb9c",
+    "url": "/css/app.44a584b5.css"
   },
   {
     "revision": "e3b26f0863f90c95d80d",
@@ -40,12 +40,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/arrows.358daf43.svg"
   },
   {
-    "revision": "75b78961d6718f0eb63dffcd5dd10b3c",
-    "url": "/img/background-footer.75b78961.svg"
+    "revision": "2239ef9e778702fe4042252ac812b4c0",
+    "url": "/img/background-footer.2239ef9e.svg"
   },
   {
-    "revision": "a56d33d8290e9af29e2d09029cf5fd07",
-    "url": "/img/background-footer2.a56d33d8.svg"
+    "revision": "1b19e48833acce7fa7635b3e98904007",
+    "url": "/img/background-footer2.1b19e488.svg"
   },
   {
     "revision": "96d1c9e4c4c4e65a255247e0b39555fa",
@@ -72,6 +72,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/edit.cf9ef033.png"
   },
   {
+    "revision": "b5fcf8177543a0677eecdac1ec8cab41",
+    "url": "/img/facebook.b5fcf817.svg"
+  },
+  {
     "revision": "933ebf6748a377a22a1385f794582acc",
     "url": "/img/file-upload.933ebf67.svg"
   },
@@ -84,8 +88,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/fully-booked.b77e4122.png"
   },
   {
-    "revision": "66c0ea63d9eac707b07f923ecf9c6eeb",
-    "url": "/img/help.66c0ea63.svg"
+    "revision": "10fee653f22759395da93c21d1eea5ab",
+    "url": "/img/help.10fee653.svg"
   },
   {
     "revision": "1327d037a4df32c99150ecd299ecd427",
@@ -120,8 +124,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/image.c66293cc.svg"
   },
   {
+    "revision": "fc23b90236f87b11147810f35f4c5293",
+    "url": "/img/instegram.fc23b902.svg"
+  },
+  {
     "revision": "15c137ee114af2c99f26cf723fd78d6f",
     "url": "/img/link.15c137ee.svg"
+  },
+  {
+    "revision": "c0c32ea60815d3d72d2dbcb59b793ec3",
+    "url": "/img/linkdin.c0c32ea6.svg"
   },
   {
     "revision": "e86e4ce20844155e918bff0077ba7704",
@@ -146,6 +158,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "f89efb778b2e812898de99511c816fc1",
     "url": "/img/ok.f89efb77.svg"
+  },
+  {
+    "revision": "bf186d29dcb1a5f83c64676977fd0fd1",
+    "url": "/img/people.bf186d29.jpg"
   },
   {
     "revision": "b7589191dfc88f713846556b3f035882",
@@ -180,12 +196,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/wifi.347b16ee.svg"
   },
   {
-    "revision": "8c2555266c5bc48b448a3b6e0de2271a",
+    "revision": "4d57783a9afb63f1f237f334d245195f",
     "url": "/index.html"
   },
   {
-    "revision": "ef5f1039dec1930a6547",
-    "url": "/js/app.6a8ccaec.js"
+    "revision": "6ecf63876d5e732acb9c",
+    "url": "/js/app.054c0db1.js"
   },
   {
     "revision": "e3b26f0863f90c95d80d",
