@@ -14,15 +14,10 @@ async function getReviewsCount() {
 }
 
 async function query(filterBy = {}) {
-    // console.log(filterBy.id.toString(), 'filterBy////////////////////////////////');
-
     const criteria = _buildCriteria(filterBy)
-
     const collection = await dbService.getCollection('review')
     try {
         const reviews = await collection.find(criteria).toArray();
-        // console.log(reviews, 'reviews////////////////////////////////');
-
         return reviews
     } catch (err) {
         console.log('ERROR: cannot find reviews')

@@ -12,8 +12,6 @@ module.exports = {
 }
 
 async function query(filterBy = {}, limit = null) {
-    console.log('dfsssssssssssssssssssssssssss',filterBy);
-
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
@@ -97,11 +95,9 @@ function _buildCriteria(filterBy) {
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
-    // console.log(filterBy.creators, 'filterBy.creatorsfilterBy.creatorsfilterBy.creatorsfilterBy.creators');
 
     if (filterBy.creators) {
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
-        console.log(criteria, 'criteria after creators////////////');
     }
     if (filterBy.tags) {
         criteria.tags = { $all: filterBy.tags.split(',') }
