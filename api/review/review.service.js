@@ -14,6 +14,10 @@ async function getReviewsCount() {
 }
 
 async function query(filterBy = {}) {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 1bdc03e45788aeee4b28c105a8b57ae44b89b411
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
@@ -67,8 +71,13 @@ async function update(review) {
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = (filterBy.id) ? { 'about._id': ObjectId(filterBy.id) } : {}
-
+    const criteria = {}
+    if (filterBy.id) {
+        criteria['about._id'] =  ObjectId(filterBy.id)
+    }
+    if (filterBy.byId){
+        criteria['by._id'] = ObjectId(filterBy.byId)
+    }
     return criteria;
 }
 

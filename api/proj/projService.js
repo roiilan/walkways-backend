@@ -95,7 +95,6 @@ function _buildCriteria(filterBy) {
     if (filterBy.categories) {
         criteria.category = { $in: filterBy.categories.split(',') }
     }
-
     if (filterBy.creators) {
         criteria['createdBy.fullName'] = { $in: filterBy.creators.split(',') }
     }
@@ -108,9 +107,10 @@ function _buildCriteria(filterBy) {
     if (filterBy.endsAt !== 'null' && filterBy.endsAt !== undefined) {
         criteria.endsAt = { $lte: +filterBy.endsAt }
     }
-    // if (filterBy.id) {
-    //     criteria = { 'createdBy._id': ObjectId(filterBy.id.toString()) }
-    //     console.log(criteria, 'criteria');
-    // }
+    if (filterBy.id) {
+        criteria['createdBy._id'] = filterBy.id; 
+    }
+    console.log(criteria, 'criteria after creators');
+
     return criteria;
 }
