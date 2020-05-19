@@ -12,7 +12,6 @@ function connectSockets(io) {
                     const updatedUser = await userService.update(user, true)
                     io.emit(`updatedUser ${user._id}`, updatedUser)
                 })
-
         })
         socket.on('decline', notification => {
            console.log('from:', notification.from.fullName);
@@ -51,20 +50,6 @@ function connectSockets(io) {
                     user.notifications.splice(idx, 1);
                     await userService.update(user, true)
                 })
-        })
-
-        socket.on('chat newMsg', msg=>{
-            io.to(socket.myTopic).emit('chat addMsg', msg)
-        })
-        socket.on('chat topic', topic=>{
-            if (socket.myTopic) {
-                socket.leave(socket.myTopic)
-            }
-            socket.join(topic)
-            socket.myTopic = topic;
-        })
-        socket.on('writingUser', ({ from, topic }) => {
-            socket.broadcast.emit('typing', { from, topic })
-        })
+        })  
     })
 }
