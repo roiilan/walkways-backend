@@ -1,5 +1,6 @@
 const dbService = require('../../services/db.service')
 const reviewService = require('../review/review.service')
+const projService = require('../proj/projService')
 const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
@@ -60,13 +61,32 @@ async function remove(userId) {
 
 async function update(user) {
     const collection = await dbService.getCollection('users')
-    const filterBy = {byId: user._id}
+    const filterByForUser = {byId: user._id}
+    const filterByForProj = {id: user._id}
     user._id = ObjectId(user._id);
     try {
         await collection.replaceOne({ "_id": user._id }, { $set: user })
-        const reviewsByUser = await reviewService.query(filterBy)
-        console.log(reviewsByUser, 'reviewsByUser length');
-        console.log( user._id, ' user._id');
+        const reviewsByUser = await reviewService.query(filterByForUser)
+        reviewsByUser.forEach(async review=>{
+            review.by = {
+                    _id: user._id,
+                    fullName: user.fullName,
+                    imgUrl: user.imgUrl
+            }
+            await reviewService.update(review)
+            } 
+        )
+        const projsByUser = await projService.query(filterByForProj)
+        projsByUser.forEach(async proj=>{
+            proj.createdBy = {
+                    _id: user._id,
+                    fullName: user.fullName,
+                    imgUrl: user.imgUrl,
+                    joinAt: user.joinAt
+            }
+            await projService.update(proj)
+            } 
+        )
         return user
     } catch (err) {
         console.log(`ERROR: cannot update user ${user._id}`)
