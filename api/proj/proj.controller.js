@@ -6,7 +6,6 @@ async function getProj(req, res) {
 }
 
 async function getProjs(req, res) {
-    
     const projs = await projService.query(req.query)
     res.send(projs)
 }
