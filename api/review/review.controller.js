@@ -11,7 +11,6 @@ async function getReviews(req, res) {
         } else {
 
             const reviews = await reviewService.query(req.params)
-                // console.log(reviews, 'reviews in controller');
             res.json(reviews)
         }
     } catch (err) {

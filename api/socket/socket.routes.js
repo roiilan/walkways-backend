@@ -1,48 +1,57 @@
 module.exports = connectSockets
 const userService = require('../user/user.service')
+const projService = require('../proj/projService')
+const utilService = require('../../services/util.service')
 
 function connectSockets(io) {
     io.on('connection', socket => {
         socket.on('applyToProj', request => {
-            //TODO go to service and update proj
-            // io.emit('chat addMsg', msg)
-            // emits only to sockets in the same room
-            // io.to(request.projOwnerId).emit('send request', request)
-            // console.log(request, 'request//////////////////////////////');
-            
-            //Save to data base(push request into creator notification)
-            // userService.getById(request.to._id)
-            // // userService.getById(request.projOwnerId)
-            //     .then(user => {
-            //         // var projOwner = user
-            //         // projOwner.notifications.push(request)
-            //         // userService.update(projOwner)
-            //         user.notifications.push(request)
-            //         userService.update(user)
-            //     })
-                // userService.update(user)
+            userService.getById(request.to._id)
+                .then(async user => {
+                    user.notifications.push(request)
+                    const updatedUser = await userService.update(user, true)
+                    io.emit(`updatedUser ${user._id}`, updatedUser)
+                })
 
-                io.emit(`apply ${request.to._id}`, request)
-                // io.to(socket.myTopic).emit(request.to._id, request)
         })
         socket.on('decline', notification => {
-
-            io.emit(`decline ${notification.from._id}`, notification)
-            io.emit(`decline ${notification.to._id}`, notification)
+           console.log('from:', notification.from.fullName);
+           console.log('to:', notification.to.fullName);
+            userService.getById(notification.to._id)
+                .then(async user => {
+                    user.notifications.push(notification)
+                    const updatedUser = await userService.update(user, true)
+                    io.emit(`updatedUser ${user._id}`, updatedUser)
+                })
+            userService.getById(notification.from._id)
+                .then(async user => {
+                    const idx = user.notifications.findIndex(
+                        currProj => currProj._id === notification._id
+                      );
+                    user.notifications.splice(idx, 1);
+                    await userService.update(user, true)
+                })
         })
         socket.on('approve', notification => {
-
-            io.emit(`approve ${notification.from._id}`, notification)
-            io.emit(`approve ${notification.to._id}`, notification)
+            userService.getById(notification.to._id)
+            .then(async user => {
+                user.notifications.push(notification)
+                const updatedUser = await userService.update(user, true)
+                io.emit(`updatedUser ${user._id}`, updatedUser)
+            })
+            userService.getById(notification.from._id)
+                .then(async user => {
+                    const proj = await projService.getById(notification.proj._id);
+                    proj.membersApplyed.push(notification.from);
+                    proj.membersNeeded -= notification.memebersApllied;
+                    await projService.update(proj);
+                    const idx = user.notifications.findIndex(
+                        currProj => currProj._id === notification._id
+                    );
+                    user.notifications.splice(idx, 1);
+                    await userService.update(user, true)
+                })
         })
-        // socket.on('user topic', topic => {
-        //     // socket.id = topic
-        //     if (socket.userTopic) {
-        //         socket.leave(socket.userTopic)
-        //     }
-        //     socket.join(topic)
-        //     socket.userTopic = topic;
-        // })
 
         socket.on('chat newMsg', msg=>{
             io.to(socket.myTopic).emit('chat addMsg', msg)

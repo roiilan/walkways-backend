@@ -58,8 +58,6 @@ async function update(review) {
     review.about._id = ObjectId(review.about._id);
     try {
         await collection.replaceOne({ "_id": review._id }, { $set: review })
-        console.log('review in backend in review service line 89:', review);
-
         return review
     } catch (err) {
         console.log(`ERROR: cannot update review ${review._id}`)
