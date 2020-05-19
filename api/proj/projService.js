@@ -62,10 +62,13 @@ async function remove(projId) {
 }
 
 async function update(proj) {
+    console.log(proj, 'before epdate');
+    
     const collection = await dbService.getCollection('projs')
     proj._id = ObjectId(proj._id);
     try {
         await collection.replaceOne({ "_id": proj._id }, { $set: proj })
+        console.log('after epdate');
         return proj
     } catch (err) {
         (`ERROR: cannot update proj ${proj._id}`)
@@ -108,7 +111,7 @@ function _buildCriteria(filterBy) {
         criteria.endsAt = { $lte: +filterBy.endsAt }
     }
     if (filterBy.id) {
-        criteria['createdBy._id'] = filterBy.id; 
+        criteria['createdBy._id'] = ObjectId(filterBy.id); 
     }
     console.log(criteria, 'criteria after creators');
 
