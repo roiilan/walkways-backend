@@ -108,7 +108,8 @@ function _buildCriteria(filterBy) {
         criteria.endsAt = { $lte: +filterBy.endsAt }
     }
     if (filterBy.id) {
-        criteria['createdBy._id'] = ObjectId(filterBy.id); 
+        criteria['createdBy._id'] = { $in: [filterBy.id, ObjectId(filterBy.id)] } 
+        // criteria['createdBy._id'] = filterBy.id; 
     }
 
     return criteria;
