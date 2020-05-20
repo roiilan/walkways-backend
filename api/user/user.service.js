@@ -70,7 +70,7 @@ async function update(user, isSocket = false) {
             const reviewsByUser = await reviewService.query(filterByForUser)
             reviewsByUser.forEach(async review=>{
                 review.by = {
-                        _id: user._id,
+                        _id:  user._id,
                         fullName: user.fullName,
                         imgUrl: user.imgUrl
                 }
@@ -96,6 +96,7 @@ async function update(user, isSocket = false) {
     }
 }
 async function add(user) {
+    user._id = ObjectId(user._id);
     const collection = await dbService.getCollection('users')
     try {
         await collection.insertOne(user);

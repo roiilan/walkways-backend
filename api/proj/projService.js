@@ -11,17 +11,17 @@ module.exports = {
     add
 }
 
-async function query(filterBy = {}, limit = null) {
+async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
-        if (filterBy.limit) {
-            limit = filterBy.limit
-            return await collection.aggregate([{ $sample: { size: +limit } }]).toArray();
-        } else {
+        // if (filterBy.limit) {
+        //     limit = filterBy.limit
+        //     return await collection.aggregate([{ $sample: { size: +limit } }]).toArray();
+        // } else {
             const projs = await collection.find(criteria).toArray();
             return projs
-        }
+        // }
     } catch (err) {
         console.log('ERROR: cannot find projs', err)
         throw err;
