@@ -1,10 +1,8 @@
 const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
-
 async function getReviewsCount() {
     const collection = await dbService.getCollection('review')
-
     try {
         return await collection.find().count()
     } catch (err) {
@@ -14,7 +12,6 @@ async function getReviewsCount() {
 }
 
 async function query(filterBy = {}) {
-    
     const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('review')
     try {
@@ -36,17 +33,14 @@ async function remove(reviewId) {
     }
 }
 
-
 async function add(review) {
     review.by._id = ObjectId(review.by._id);
     review.about._id = ObjectId(review.about._id);
-
     const collection = await dbService.getCollection('review')
     try {
         await collection.insertOne(review);
         return review;
     } catch (err) {
-        console.log(`ERROR: cannot insert user`)
         throw err;
     }
 }
@@ -54,8 +48,8 @@ async function add(review) {
 async function update(review) {
     const collection = await dbService.getCollection('review')
     review._id = ObjectId(review._id);
-    review.by._id = ObjectId(review.by._id);
-    review.about._id = ObjectId(review.about._id);
+    // review.by._id = ObjectId(review.by._id);
+    // review.about._id = ObjectId(review.about._id);
     try {
         await collection.replaceOne({ "_id": review._id }, { $set: review })
         return review

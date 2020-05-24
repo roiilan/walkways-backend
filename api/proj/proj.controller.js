@@ -7,7 +7,8 @@ async function getProj(req, res) {
 
 async function getProjs(req, res) {
     const projs = await projService.query(req.query)
-    res.send(projs)
+    if (req.query.count) res.json(projs)
+    else res.send(projs)
 }
 
 async function deleteProj(req, res) {

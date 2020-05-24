@@ -1,7 +1,7 @@
-const dbService = require('../../services/db.service')
-const reviewService = require('../review/review.service')
-const projService = require('../proj/projService')
-const ObjectId = require('mongodb').ObjectId
+const dbService = require('../../services/db.service');
+const reviewService = require('../review/review.service');
+const projService = require('../proj/projService');
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     query,
@@ -17,6 +17,9 @@ async function query(filterBy = {}) {
     const collection = await dbService.getCollection('users')
 
     try {
+        if(filterBy.count === 'true'){
+            return await collection.find().count()
+        }
         const users = await collection.find(criteria).toArray();
         users.forEach(user => delete user.password);
 

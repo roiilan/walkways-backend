@@ -8,31 +8,37 @@ module.exports = {
     getByEmail,
     remove,
     update,
-    add
+    add,
 }
 
+
 async function query(filterBy = {}) {
-    const criteria = _buildCriteria(filterBy)
     const collection = await dbService.getCollection('projs')
     try {
-        // if (filterBy.limit) {
-        //     limit = filterBy.limit
-        //     return await collection.aggregate([{ $sample: { size: +limit } }]).toArray();
-        // } else {
-            const projs = await collection.find(criteria).toArray();
-            return projs
-        // }
+        if(filterBy.count === 'true'){
+            return await collection.find().count()
+        }
+        if (filterBy.limit && Object.keys(filterBy).length === 1) {
+                return await collection.aggregate([{ $sample: { size: +filterBy.limit } }]).toArray();
+            } else {
+            const criteria = await _buildCriteria(filterBy)
+            return filterBy.limit
+            ? await collection.find(criteria).skip( +filterBy.skip > 0 ? ( ( +filterBy.skip) * +filterBy.limit ) : 0 ).limit(+filterBy.limit).toArray()
+            : await collection.find(criteria).toArray();
+        }
     } catch (err) {
         console.log('ERROR: cannot find projs', err)
         throw err;
     }
 }
 async function getById(projId) {
+    console.log(projId, 'projId');
+    
     const collection = await dbService.getCollection('projs')
     try {
         const proj = await collection.findOne({ "_id": ObjectId(projId) })
-        var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
-        proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
+        // var givenReviews = await reviewService.query({ id: ObjectId(proj._id) })
+        // proj.rate = givenReviews.reduce((a, b) => a + b.rate, 0) / givenReviews.length;
 
         return proj
     } catch (err) {
@@ -111,6 +117,5 @@ function _buildCriteria(filterBy) {
         criteria['createdBy._id'] = { $in: [filterBy.id, ObjectId(filterBy.id)] } 
         // criteria['createdBy._id'] = filterBy.id; 
     }
-
     return criteria;
 }

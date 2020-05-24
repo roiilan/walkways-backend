@@ -7,7 +7,8 @@ async function getUser(req, res) {
   
 async function getUsers(req, res) {
     const users = await userService.query(req.query)
-    res.send(users)
+    if (req.query.count) res.json(users)
+    else res.send(users)
 }
 
 async function deleteUser(req, res) {
