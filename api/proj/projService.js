@@ -23,7 +23,7 @@ async function query(filterBy = {}) {
             } else {
             const criteria = await _buildCriteria(filterBy)
             return filterBy.limit
-            ? await collection.find(criteria).skip( +filterBy.skip > 0 ? ( ( +filterBy.skip) * +filterBy.limit ) : 0 ).limit(+filterBy.limit).toArray()
+            ? await collection.find(criteria).skip( +filterBy.skip > 0 ? ( ( +filterBy.skip) * +filterBy.limit ) + 8 : 0 ).limit(+filterBy.limit).toArray()
             : await collection.find(criteria).toArray();
         }
     } catch (err) {
